@@ -1,0 +1,17 @@
+### Prueba login
+POST http://localhost:8001/login
+Content-Type: application/json
+
+{
+    "usuario": "admin",
+    "contrasena": "admin123"
+}
+
+### Prueba logout
+POST http://localhost:8001/logout
+Content-Type: application/json
+Authorization: Bearer tu_token_aqui
+
+### Prueba validar token
+GET http://localhost:8001/validar
+Authorization: Bearer tu_token_aqui

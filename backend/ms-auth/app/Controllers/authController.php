@@ -14,9 +14,12 @@ class AuthController
             throw new Exception("Usuario y contraseña son obligatorios", 1);
         }
 
-        $usuario = Usuario::where('usuario', $data['usuario'])
-            ->where('estado', 'activo')
-            ->first();
+        $usuario = Usuario::where(function($query) use ($data) {
+         $query->where('usuario', $data['usuario'])
+        ->orWhere('correo', $data['usuario']);
+    })
+        ->where('estado', 'activo')
+        ->first();
 
         if (!$usuario || $usuario->contrasena !== $data['contrasena']) {
             throw new Exception("Credenciales incorrectas", 2);
