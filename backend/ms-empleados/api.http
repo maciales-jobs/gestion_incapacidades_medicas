@@ -1,0 +1,58 @@
+### Prueba funcionando
+GET http://localhost:8002/
+
+### Listar empleados
+GET http://localhost:8002/empleados
+
+### Obtener empleado por ID
+GET http://localhost:8002/empleados/1
+
+### Crear empleado
+POST http://localhost:8002/empleados
+Content-Type: application/json
+
+{
+    "nombres": "Pedro",
+    "apellidos": "Gomez",
+    "documento": "1000999888",
+    "correo": "pedro@empresa.com",
+    "telefono": "3105557777",
+    "cargo": "Desarrollador",
+    "area": "Tecnologia",
+    "fecha_ingreso": "2025-03-15"
+}
+
+### Actualizar empleado
+PUT http://localhost:8002/empleados/3
+Content-Type: application/json
+
+{
+    "telefono": "3119998888",
+    "cargo": "Senior"
+
+}
+
+### Cambiar estado
+PATCH http://localhost:8002/empleados/1/estado
+Content-Type: application/json
+
+{
+    "estado": "inactivo"
+}
+
+### Buscar por area
+GET http://localhost:8002/empleados/buscar?area=Tecnologia
+
+### Buscar por documento
+GET http://localhost:8002/empleados/buscar?documento=1000
+
+### Buscar por estado
+GET http://localhost:8002/empleados/buscar?estado=activo
+
+### Actualizar estado por PUT
+PUT http://localhost:8002/empleados/1
+Content-Type: application/json
+
+{
+    "estado": "activo"
+}
