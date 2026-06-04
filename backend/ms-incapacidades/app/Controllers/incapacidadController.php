@@ -26,6 +26,9 @@ class IncapacidadController
     // Crear
     public function crear($data)
     {
+         if (!isset($data['empleado_id']) || !is_numeric($data['empleado_id']) || $data['empleado_id'] <= 0) {
+        throw new Exception("El empleado_id debe ser un numero valido mayor a 0", 400);
+    }
         $this->validar($data);
 
         // Calcular días automáticamente
@@ -45,6 +48,9 @@ class IncapacidadController
     // Actualizar
     public function actualizar($id, $data)
     {
+        if (isset($data['empleado_id']) && (!is_numeric($data['empleado_id']) || $data['empleado_id'] <= 0)) {
+        throw new Exception("El empleado_id debe ser un numero valido mayor a 0", 400);
+    }
         $incapacidad = Incapacidad::find($id);
         if (!$incapacidad) {
             throw new Exception("Incapacidad no encontrada", 404);
