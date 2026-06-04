@@ -90,7 +90,7 @@ class EmpleadoController
         $query = Empleado::query();
 
         if (isset($filtro['documento'])) {
-            $query->where('documento', 'like', '%' . $filtro['documento'] . '%');
+            $query->where('documento', $filtro['documento']); 
         }
 
         if (isset($filtro['area'])) {

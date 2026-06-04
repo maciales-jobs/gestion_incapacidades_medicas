@@ -1,23 +1,23 @@
 <?php
 
-use App\Controllers\EmpleadoController;
+use App\Controllers\IncapacidadController;
 use Slim\App;
 
 return function (App $app) {
     
     // Ruta de prueba
     $app->get('/', function ($request, $response) {
-        $response->getBody()->write('{"mensaje": "ms-empleados funcionando"}');
+        $response->getBody()->write('{"mensaje": "ms-incapacidades funcionando"}');
         return $response->withHeader('Content-Type', 'application/json');
     });
 
-    // Listar todos
-    $app->get('/empleados', function ($request, $response) {
+    // Listar todas
+    $app->get('/incapacidades', function ($request, $response) {
         try {
-            $controller = new EmpleadoController();
-            $empleados = $controller->listar();
+            $controller = new IncapacidadController();
+            $incapacidades = $controller->listar();
             
-            $response->getBody()->write($empleados->toJson());
+            $response->getBody()->write($incapacidades->toJson());
             return $response->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
@@ -26,14 +26,14 @@ return function (App $app) {
         }
     });
 
-
-    $app->get('/empleados/buscar', function ($request, $response) {
+    // ✅ BUSCAR - va ANTES de /{id}
+    $app->get('/incapacidades/buscar', function ($request, $response) {
         try {
             $params = $request->getQueryParams();
-            $controller = new EmpleadoController();
-            $empleados = $controller->buscar($params);
+            $controller = new IncapacidadController();
+            $incapacidades = $controller->buscar($params);
             
-            $response->getBody()->write($empleados->toJson());
+            $response->getBody()->write($incapacidades->toJson());
             return $response->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
@@ -42,13 +42,13 @@ return function (App $app) {
         }
     });
 
-    // Obtener por ID
-    $app->get('/empleados/{id}', function ($request, $response, $args) {
+    // ✅ OBTENER POR ID - va DESPUÉS de /buscar
+    $app->get('/incapacidades/{id}', function ($request, $response, $args) {
         try {
-            $controller = new EmpleadoController();
-            $empleado = $controller->obtener($args['id']);
+            $controller = new IncapacidadController();
+            $incapacidad = $controller->obtener($args['id']);
             
-            $response->getBody()->write($empleado->toJson());
+            $response->getBody()->write($incapacidad->toJson());
             return $response->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
@@ -59,13 +59,13 @@ return function (App $app) {
     });
 
     // Crear
-    $app->post('/empleados', function ($request, $response) {
+    $app->post('/incapacidades', function ($request, $response) {
         try {
             $data = $request->getParsedBody();
-            $controller = new EmpleadoController();
-            $empleado = $controller->crear($data);
+            $controller = new IncapacidadController();
+            $incapacidad = $controller->crear($data);
             
-            $response->getBody()->write($empleado->toJson());
+            $response->getBody()->write($incapacidad->toJson());
             return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
@@ -76,13 +76,15 @@ return function (App $app) {
     });
 
     // Actualizar
-    $app->put('/empleados/{id}', function ($request, $response, $args) {
+    $app->put('/incapacidades/{id}', function ($request, $response, $args) {
         try {
-            $data = $request->getParsedBody();
-            $controller = new EmpleadoController();
-            $empleado = $controller->actualizar($args['id'], $data);
+            $body = $request->getBody()->getContents();
+            $data = json_decode($body, true);
             
-            $response->getBody()->write($empleado->toJson());
+            $controller = new IncapacidadController();
+            $incapacidad = $controller->actualizar($args['id'], $data);
+            
+            $response->getBody()->write($incapacidad->toJson());
             return $response->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
@@ -93,13 +95,29 @@ return function (App $app) {
     });
 
     // Cambiar estado
-    $app->patch('/empleados/{id}/estado', function ($request, $response, $args) {
+    $app->patch('/incapacidades/{id}/estado', function ($request, $response, $args) {
         try {
             $data = $request->getParsedBody();
-            $controller = new EmpleadoController();
-            $empleado = $controller->cambiarEstado($args['id'], $data['estado']);
+            $controller = new IncapacidadController();
+            $incapacidad = $controller->cambiarEstado($args['id'], $data['estado']);
             
-            $response->getBody()->write($empleado->toJson());
+            $response->getBody()->write($incapacidad->toJson());
+            return $response->withHeader('Content-Type', 'application/json');
+            
+        } catch (Exception $e) {
+            $code = $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500;
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+            return $response->withStatus($code)->withHeader('Content-Type', 'application/json');
+        }
+    });
+
+    // Finalizar
+    $app->patch('/incapacidades/{id}/finalizar', function ($request, $response, $args) {
+        try {
+            $controller = new IncapacidadController();
+            $incapacidad = $controller->finalizar($args['id']);
+            
+            $response->getBody()->write($incapacidad->toJson());
             return $response->withHeader('Content-Type', 'application/json');
             
         } catch (Exception $e) {
