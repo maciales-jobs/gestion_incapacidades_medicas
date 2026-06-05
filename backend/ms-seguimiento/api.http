@@ -1,0 +1,40 @@
+### Prueba funcionando
+GET http://localhost:8004/
+
+### Listar seguimientos
+GET http://localhost:8004/seguimientos
+
+### Obtener seguimiento por ID
+GET http://localhost:8004/seguimientos/1
+
+### Crear seguimiento
+POST http://localhost:8004/seguimientos
+Content-Type: application/json
+
+{
+    "incapacidad_id": 1,
+    "fecha": "2026-06-05",
+    "comentario": "Nuevo seguimiento de prueba",
+    "estado": "en_revision",
+    "usuario_responsable": "admin"
+}
+
+### Actualizar seguimiento
+PUT http://localhost:8004/seguimientos/1
+Content-Type: application/json
+
+{
+    "comentario": "Seguimiento actualizado"
+}
+
+### Eliminar seguimiento
+DELETE http://localhost:8004/seguimientos/4
+
+### Buscar por incapacidad
+GET http://localhost:8004/seguimientos/incapacidad/1
+
+### Buscar por estado
+GET http://localhost:8004/seguimientos/buscar?estado=aprobada
+
+### Buscar por usuario
+GET http://localhost:8004/seguimientos/buscar?usuario_responsable=admin
