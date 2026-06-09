@@ -4,7 +4,10 @@ use App\Controllers\EmpleadoController;
 use Slim\App;
 
 return function (App $app) {
-    
+
+    $app->options('/{routes:.+}', function ($request, $response) {
+    return $response->withStatus(200);
+    });
     // Ruta de prueba
     $app->get('/', function ($request, $response) {
         $response->getBody()->write('{"mensaje": "ms-empleados funcionando"}');
