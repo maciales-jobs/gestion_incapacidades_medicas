@@ -97,10 +97,6 @@ class EmpleadoController
             $query->where('area', 'like', '%' . $filtro['area'] . '%');
         }
 
-        if (isset($filtro['cargo'])) {
-            $query->where('cargo', 'like', '%' . $filtro['cargo'] . '%');
-        }
-
         if (isset($filtro['estado'])) {
             $query->where('estado', $filtro['estado']);
         }
